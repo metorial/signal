@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: signal-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: signal
+      POSTGRES_PASSWORD: signal
+      POSTGRES_DB: signal
+    volumes:
+      - postgres_data2:/var/lib/postgresql/data
+    networks:
+      - signal-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: signal-redis
+    restart: unless-stopped
+    networks:
+      - signal-network
+
+  object-storage:
+    image: ghcr.io/metorial/object-storage:latest
+    volumes:
+      - object-store-data:/app/data
+    environment:
+      RUST_LOG: info
+      AWS_ACCESS_KEY_ID: ${OBJECT_STORAGE_AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${OBJECT_STORAGE_AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${OBJECT_STORAGE_AWS_REGION}
+      
+      OBJECT_STORE__SERVER__HOST: 0.0.0.0
+      OBJECT_STORE__SERVER__PORT: 52010
+      OBJECT_STORE__BACKEND__TYPE: s3
+      OBJECT_STORE__BACKEND__REGION: ${OBJECT_STORAGE_AWS_REGION}
+      OBJECT_STORE__BACKEND__PHYSICAL_BUCKET: ${OBJECT_STORAGE_AWS_S3_BUCKET}
+
+    container_name: signal-object-storage
+    restart: unless-stopped
+    networks:
+      - signal-network
+
+  signal:  
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    container_name: signal-service
+    restart: unless-stopped
+    ports:
+      - "52050:52050"
+    environment:
+      DATABASE_URL: postgresql://signal:signal@postgres:5432/signal
+      REDIS_URL: redis://redis:6379/0
+      
+      OBJECT_STORAGE_URL: http://object-storage:52010
+      LOGS_BUCKET_NAME: logs
+
+    volumes:
+      - ./src:/app/src:ro
+      - ./package.json:/app/package.json:ro
+      - ./tsconfig.json:/app/tsconfig.json:ro
+    depends_on:
+      - postgres
+      - redis
+      - object-storage
+    networks:
+      - signal-network
+
+volumes:
+  postgres_data2:
+    driver: local
+  object-store-data:
+    driver: local
+
+networks:
+  signal-network:
+    driver: bridge

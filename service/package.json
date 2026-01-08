@@ -1,0 +1,50 @@
+{
+  "name": "signal-service",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun ./src/server.ts",
+    "dev": "docker compose -p signal -f ./docker-compose.dev.yml up --pull always --build signal object-storage"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.957.0",
+    "@aws-sdk/client-iam": "^3.957.0",
+    "@aws-sdk/client-lambda": "^3.958.0",
+    "@lowerdeck/api-mux": "^1.0.1",
+    "@lowerdeck/cache": "^1.0.0",
+    "@lowerdeck/canonicalize": "^1.0.4",
+    "@lowerdeck/cron": "^1.0.4",
+    "@lowerdeck/encryption": "^1.0.6",
+    "@lowerdeck/env": "^1.0.4",
+    "@lowerdeck/error": "^1.0.8",
+    "@lowerdeck/hash": "^1.0.4",
+    "@lowerdeck/id": "^1.0.5",
+    "@lowerdeck/once": "^1.0.4",
+    "@lowerdeck/pagination": "^1.0.4",
+    "@lowerdeck/queue": "^1.0.4",
+    "@lowerdeck/rpc-client": "^1.0.2",
+    "@lowerdeck/rpc-server": "^1.0.4",
+    "@lowerdeck/service": "^1.0.3",
+    "@lowerdeck/slugify": "^1.0.4",
+    "@lowerdeck/validation": "^1.0.4",
+    "@metorial-services/forge-client": "^1.0.3",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "axios": "^1.13.2",
+    "date-fns": "^4.1.0",
+    "ipaddr.js": "^2.3.0",
+    "jszip": "^3.10.1",
+    "object-storage-client": "^0.2.5",
+    "prisma": "^7.2.0",
+    "prisma-json-types-generator": "^4.0.1",
+    "snowflake-uuid": "^1.0.0",
+    "yaml": "^2.8.2"
+  }
+}
