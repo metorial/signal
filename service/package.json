@@ -5,11 +5,19 @@
   "private": true,
   "scripts": {
     "start": "bun ./src/server.ts",
-    "dev": "docker compose -p signal -f ./docker-compose.dev.yml up --pull always --build signal object-storage"
+    "dev": "docker compose -p signal -f ./docker-compose.dev.yml up --pull always --build signal object-storage",
+    "test": "vitest run tests/unit/ tests/integration/",
+    "test:watch": "vitest tests/unit/ tests/integration/",
+    "test:ui": "vitest --ui tests/unit/ tests/integration/",
+    "test:coverage": "vitest run --coverage tests/unit/ tests/integration/",
+    "test:e2e": "docker compose -p signal-test -f ./docker-compose.test.yml up --abort-on-container-exit --exit-code-from test-runner"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/node": "^25.0.3"
+    "@types/node": "^25.0.3",
+    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/ui": "^4.0.16",
+    "vitest": "^4.0.16"
   },
   "peerDependencies": {
     "typescript": "^5"
