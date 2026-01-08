@@ -4,7 +4,7 @@ import { Service } from '@lowerdeck/service';
 import type { Sender, Tenant } from '../../prisma/generated/client';
 import { db } from '../db';
 import { getId } from '../id';
-import { newEventQueue } from '../queues/send/send';
+import { newEventQueue } from '../queues/send/init';
 
 let include = {
   sender: true
