@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Prisma generate
+        run: bun prisma generate
+
       - name: Type check
         run: bunx tsc --noEmit
 
@@ -34,15 +37,6 @@ jobs:
 
       - name: Run tests with coverage
         run: bun run test:coverage
-
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v4
-        if: success()
-        with:
-          directory: ./service/coverage
-          flags: unittests
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   lint:
     name: Lint
@@ -62,6 +56,9 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+
+      - name: Prisma generate
+        run: bun prisma generate
 
       - name: Type check
         run: bunx tsc --noEmit
