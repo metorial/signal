@@ -1,6 +1,6 @@
-# Metorial Function Bay Client
+# Metorial Signal Client
 
-A client library for interacting with the Metorial Function Bay platform using TypeScript.
+A client library for interacting with the Metorial Signal platform using TypeScript.
 
 ## Usage 
 
