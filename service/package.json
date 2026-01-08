@@ -8,7 +8,8 @@
     "dev": "docker compose -p signal -f ./docker-compose.dev.yml up --pull always --build signal object-storage"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/node": "^25.0.3"
   },
   "peerDependencies": {
     "typescript": "^5"
