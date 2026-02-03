@@ -1,7 +1,7 @@
-import { createFetchRouter } from '@lowerdeck/testing-tools';
+import { createClient } from '@lowerdeck/rpc-client';
 import { rpcMux } from '@lowerdeck/rpc-server';
-import { createSignalClient } from '../../../clients/typescript/src/index.ts';
-import { SignalRPC } from '../controllers';
+import { createFetchRouter } from '@lowerdeck/testing-tools';
+import { SignalRPC, type SignalClient } from '../controllers';
 
 type ClientOptsLike = {
   endpoint: string;
@@ -29,7 +29,7 @@ export const createTestSignalClient = (opts: Partial<ClientOptsLike> = {}) => {
   registerInMemoryRoute(endpoint);
   fetchRouter.install();
 
-  return createSignalClient({
+  return createClient<SignalClient>({
     ...opts,
     endpoint
   } as ClientOptsLike);
