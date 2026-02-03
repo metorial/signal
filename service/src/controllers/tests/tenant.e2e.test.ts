@@ -13,17 +13,21 @@ describe('tenant.e2e', () => {
     const existingTenant = await f.tenant.default({ name: 'Original Tenant' });
 
     const fetched = await signalClient.tenant.get({ tenantId: existingTenant.id });
-    expect(fetched.id).toBe(existingTenant.id);
-    expect(fetched.identifier).toBe(existingTenant.identifier);
-    expect(fetched.name).toBe(existingTenant.name);
+    expect(fetched).toMatchObject({
+      id: existingTenant.id,
+      identifier: existingTenant.identifier,
+      name: existingTenant.name
+    });
 
     const updated = await signalClient.tenant.upsert({
       identifier: existingTenant.identifier,
       name: 'Updated Tenant'
     });
 
-    expect(updated.id).toBe(existingTenant.id);
-    expect(updated.name).toBe('Updated Tenant');
+    expect(updated).toMatchObject({
+      id: existingTenant.id,
+      name: 'Updated Tenant'
+    });
 
     const fetchedUpdated = await signalClient.tenant.get({ tenantId: existingTenant.id });
     expect(fetchedUpdated.name).toBe('Updated Tenant');

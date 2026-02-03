@@ -52,10 +52,14 @@ describe('eventDeliveryAttempt.e2e', () => {
       eventDeliveryAttemptId: attempt.id
     });
 
-    expect(fetched.id).toBe(attempt.id);
-    expect(fetched.status).toBe('failed');
-    expect(fetched.intent.id).toBe(intent.id);
-    expect(fetched.intent.event.id).toBe(event.id);
+    expect(fetched).toMatchObject({
+      id: attempt.id,
+      status: 'failed',
+      intent: {
+        id: intent.id,
+        event: { id: event.id }
+      }
+    });
 
     const listed = await signalClient.eventDeliveryAttempt.list({
       tenantId: tenant.id,

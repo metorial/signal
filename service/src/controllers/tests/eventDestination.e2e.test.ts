@@ -32,9 +32,11 @@ describe('eventDestination.e2e', () => {
       }
     });
 
-    expect(created.name).toBe('Primary Webhook');
-    expect(created.eventTypes).toBeNull();
-    expect(created.webhook?.url).toBe('https://example.com/webhook');
+    expect(created).toMatchObject({
+      name: 'Primary Webhook',
+      eventTypes: null,
+      webhook: { url: 'https://example.com/webhook' }
+    });
 
     const fetched = await signalClient.eventDestination.get({
       tenantId: tenant.id,
@@ -55,8 +57,10 @@ describe('eventDestination.e2e', () => {
       eventTypes: ['user.created']
     });
 
-    expect(updated.name).toBe('Updated Webhook');
-    expect(updated.eventTypes).toEqual(['user.created']);
+    expect(updated).toMatchObject({
+      name: 'Updated Webhook',
+      eventTypes: ['user.created']
+    });
 
     await signalClient.eventDestination.delete({
       tenantId: tenant.id,

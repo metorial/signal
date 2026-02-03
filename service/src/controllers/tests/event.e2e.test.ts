@@ -30,11 +30,13 @@ describe('event.e2e', () => {
       eventId: event.id
     });
 
-    expect(result.id).toBe(event.id);
-    expect(result.type).toBe('user.created');
-    expect(result.topics).toEqual(['user']);
-    expect(result.sender.id).toBe(sender.id);
-    expect(result.request?.body).toBe(payloadJson);
+    expect(result).toMatchObject({
+      id: event.id,
+      type: 'user.created',
+      topics: ['user'],
+      sender: { id: sender.id },
+      request: { body: payloadJson }
+    });
   });
 
   it('lists events for a tenant', async () => {

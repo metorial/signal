@@ -37,11 +37,15 @@ describe('eventDeliveryIntent.e2e', () => {
       eventDeliveryIntentId: intent.id
     });
 
-    expect(fetched.id).toBe(intent.id);
-    expect(fetched.status).toBe(intent.status);
-    expect(fetched.event.id).toBe(event.id);
-    expect(fetched.destination.id).toBe(destination.id);
-    expect(fetched.event.request?.body).toBe(event.payloadJson);
+    expect(fetched).toMatchObject({
+      id: intent.id,
+      status: intent.status,
+      event: {
+        id: event.id,
+        request: { body: event.payloadJson }
+      },
+      destination: { id: destination.id }
+    });
 
     const listed = await signalClient.eventDeliveryIntent.list({
       tenantId: tenant.id,
