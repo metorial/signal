@@ -4,7 +4,7 @@ import type { EventDeliveryAttemptStatus } from '../../../prisma/generated/enums
 import { db } from '../../db';
 import { env } from '../../env';
 import { getId } from '../../id';
-import { clamp } from '../../lib/clamp';
+import { calculateRetryDelaySeconds } from '../../lib/retry';
 import { generateSignature } from '../../lib/signature';
 import { getAxiosSsrfFilter } from '../../lib/ssrf';
 import { storageKey } from '../../lib/storageKey';
@@ -173,16 +173,10 @@ export let attemptDeliveryQueueProcessor = attemptDeliveryQueue.process(async da
       errorMessage: requestErrorMessage!
     });
   } else {
-    let delaySeconds = intent.destination.retryDelaySeconds;
-    if (intent.destination.retryType === 'exponential') {
-      delaySeconds = delaySeconds * 2 ** (attempt.attemptNumber - 1);
-    } else if (intent.destination.retryType === 'linear') {
-      delaySeconds = delaySeconds * attempt.attemptNumber;
-    }
-
-    delaySeconds = clamp(delaySeconds, {
-      min: 10,
-      max: 60 * 60 * 3
+    const delaySeconds = calculateRetryDelaySeconds({
+      baseDelaySeconds: intent.destination.retryDelaySeconds,
+      attemptNumber: attempt.attemptNumber,
+      retryType: intent.destination.retryType
     });
 
     let nextAttemptAt = new Date(Date.now() + delaySeconds * 1000);
