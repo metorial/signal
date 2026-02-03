@@ -82,7 +82,6 @@ services:
       - ./src:/app/service/src:ro
       - ./package.json:/app/service/package.json:ro
       - ./tsconfig.json:/app/service/tsconfig.json:ro
-      - ./prisma:/app/service/prisma:ro
     depends_on:
       postgres:
         condition: service_healthy
