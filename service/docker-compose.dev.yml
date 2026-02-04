@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./init-test-db.sh:/docker-entrypoint-initdb.d/init-test-db.sh
     ports:
-      - '45432:5432'
+      - '25432:5432'
     networks:
       - signal-network
     healthcheck:
@@ -27,7 +27,7 @@ services:
     container_name: signal-redis
     restart: unless-stopped
     ports:
-      - '6379:6379'
+      - '26379:6379'
     networks:
       - signal-network
     healthcheck:
@@ -55,7 +55,7 @@ services:
       AWS_SECRET_ACCESS_KEY: ${OBJECT_STORAGE_AWS_SECRET_ACCESS_KEY:-test}
       AWS_REGION: ${OBJECT_STORAGE_AWS_REGION:-us-east-1}
     ports:
-      - '52010:52010'
+      - '25010:52010'
     networks:
       - signal-network
     healthcheck:
@@ -72,7 +72,7 @@ services:
     container_name: signal-service
     restart: unless-stopped
     ports:
-      - '52050:52050'
+      - '25050:52050'
     environment:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
