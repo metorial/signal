@@ -54,7 +54,7 @@ services:
   signal:
     image: ghcr.io/metorial/signal:latest
     ports:
-      - "52050:52050"
+      - "25050:52050"
     environment:
       DATABASE_URL: postgresql://signal:signal@postgres:5432/signal
       REDIS_URL: redis://redis:6379/0
@@ -82,7 +82,7 @@ Start the services:
 docker-compose up -d
 ```
 
-The Signal service will be available at `http://localhost:52050`
+The Signal service will be available at `http://localhost:25050`
 
 ## TypeScript Client
 
@@ -100,7 +100,7 @@ bun add @metorial-services/signal-client
 import { createSignalClient } from '@metorial-services/signal-client';
 
 let client = createSignalClient({
-  endpoint: 'http://localhost:52050',
+  endpoint: 'http://localhost:25050',
 });
 ```
 
