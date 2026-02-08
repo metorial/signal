@@ -33,6 +33,10 @@ COPY prisma.config.ts ./prisma.config.ts
 # Generate Prisma client
 RUN bun prisma generate
 
+# Ensure migrations match schema
+RUN DATABASE_URL="postgresql://user:pass@localhost:5432/db" \
+    bun prisma migrate diff --from-migrations ./prisma/migrations --to-schema ./prisma/schema.prisma --exit-code
+
 # Copy source code
 COPY src ./src
 COPY tsconfig.json ./tsconfig.json
@@ -70,7 +74,7 @@ EXPOSE 52030
 
 # Health check using curl
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:52050/ping || exit 1
+    CMD curl -f http://localhost:12121/ || exit 1
 
 # Start command: push schema and start service
 CMD ["sh", "-c", "bun prisma db push && bun ./dist/index.js"]
