@@ -33,10 +33,20 @@ COPY prisma.config.ts ./prisma.config.ts
 # Generate Prisma client
 RUN bun prisma generate
 
-# Ensure migrations match schema
-RUN DATABASE_URL="postgresql://user:pass@localhost:5432/db" \
-    SHADOW_DATABASE_URL="postgresql://user:pass@localhost:5432/db_shadow" \
-    bun prisma migrate diff --from-migrations ./prisma/migrations --to-schema ./prisma/schema.prisma --exit-code
+# Ensure migrations match schema (requires a local shadow DB)
+RUN apt-get update && \
+    apt-get install -y postgresql && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    PG_VERSION="$(pg_lsclusters --no-header | awk 'NR==1{print $1}')" && \
+    PG_CLUSTER="$(pg_lsclusters --no-header | awk 'NR==1{print $2}')" && \
+    pg_ctlcluster "$PG_VERSION" "$PG_CLUSTER" start && \
+    su - postgres -c "psql -c \"ALTER USER postgres WITH PASSWORD 'postgres';\"" && \
+    su - postgres -c "createdb db_shadow" && \
+    DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres" \
+    SHADOW_DATABASE_URL="postgresql://postgres:postgres@localhost:5432/db_shadow" \
+    bun prisma migrate diff --from-migrations ./prisma/migrations --to-schema ./prisma/schema.prisma --exit-code && \
+    pg_ctlcluster "$PG_VERSION" "$PG_CLUSTER" stop
 
 # Copy source code
 COPY src ./src

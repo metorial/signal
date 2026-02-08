@@ -1,7 +1,7 @@
 import { Paginator } from '@lowerdeck/pagination';
 import { v } from '@lowerdeck/validation';
 import { eventPresenter } from '../presenters';
-import { eventService, senderService } from '../services';
+import { eventService, senderService } from '../services/index';
 import { app } from './_app';
 import { tenantApp } from './tenant';
 

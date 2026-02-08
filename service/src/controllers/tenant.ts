@@ -1,6 +1,6 @@
 import { v } from '@lowerdeck/validation';
 import { tenantPresenter } from '../presenters/tenant';
-import { tenantService } from '../services';
+import { tenantService } from '../services/index';
 import { app } from './_app';
 
 export let tenantApp = app.use(async ctx => {
