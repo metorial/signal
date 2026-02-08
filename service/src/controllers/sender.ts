@@ -1,6 +1,6 @@
 import { v } from '@lowerdeck/validation';
 import { senderPresenter } from '../presenters/sender';
-import { senderService } from '../services/index';
+import { senderService } from '../services';
 import { app } from './_app';
 
 export let senderApp = app.use(async ctx => {
