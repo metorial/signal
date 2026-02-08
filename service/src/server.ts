@@ -1,10 +1,11 @@
-import { SignalApi } from './controllers';
+async function main() {
+  await import('./init');
+  await import('./instrument');
+  await import('./endpoints');
+  await import('./worker');
+}
 
-console.log('Server is running');
-
-Bun.serve({
-  fetch: SignalApi,
-  port: 52050
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
 });
-
-await import('./worker');
