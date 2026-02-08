@@ -4,8 +4,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun ./src/server.ts",
+    "start": "bun run server:start",
     "dev": "bun --watch ./src/server.ts",
+    "server:build": "ncc build ./src/server.ts -o ./dist --source-map",
+    "server:start": "bun ./dist/index.js",
     "infra:up": "docker compose -p signal -f ./docker-compose.dev.yml --profile infra up -d --pull always",
     "infra:down": "docker compose -p signal -f ./docker-compose.dev.yml --profile infra down",
     "infra:logs": "docker compose -p signal -f ./docker-compose.dev.yml --profile infra logs -f",
@@ -21,6 +23,7 @@
     "@lowerdeck/testing-tools": "^1.0.1",
     "@types/bun": "latest",
     "@types/node": "^25.0.3",
+    "@vercel/ncc": "^0.38.1",
     "vitest": "4.0.17"
   },
   "peerDependencies": {
