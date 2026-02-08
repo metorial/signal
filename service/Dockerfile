@@ -35,7 +35,9 @@ RUN bun prisma generate
 
 # Ensure migrations match schema
 RUN DATABASE_URL="postgresql://user:pass@localhost:5432/db" \
-    bun prisma migrate diff --from-migrations ./prisma/migrations --to-schema ./prisma/schema.prisma --exit-code
+    SHADOW_DATABASE_URL="postgresql://user:pass@localhost:5432/db_shadow" \
+    bun prisma migrate diff --from-migrations ./prisma/migrations --to-schema ./prisma/schema.prisma --exit-code \
+    --shadow-database-url "$SHADOW_DATABASE_URL"
 
 # Copy source code
 COPY src ./src
