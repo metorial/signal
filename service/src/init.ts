@@ -1,5 +1,3 @@
-console.log(process.env);
-
 if (!process.env.DATABASE_URL) {
   if (
     !process.env.DATABASE_USERNAME ||
