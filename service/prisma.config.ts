@@ -3,17 +3,14 @@
 import 'dotenv/config';
 import { defineConfig } from 'prisma/config';
 
-if (!process.env.DATABASE_URL) {
-  if (
-    !process.env.DATABASE_USERNAME ||
-    !process.env.DATABASE_PASSWORD ||
-    !process.env.DATABASE_HOST ||
-    !process.env.DATABASE_PORT ||
-    !process.env.DATABASE_NAME
-  ) {
-    throw new Error('DATABASE_URL is not set and database component env vars are missing');
-  }
-
+if (
+  !process.env.DATABASE_URL &&
+  process.env.DATABASE_USERNAME &&
+  process.env.DATABASE_PASSWORD &&
+  process.env.DATABASE_HOST &&
+  process.env.DATABASE_PORT &&
+  process.env.DATABASE_NAME
+) {
   process.env.DATABASE_URL = `postgres://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}?schema=public&sslmode=no-verify&connection_limit=20`;
 }
 
