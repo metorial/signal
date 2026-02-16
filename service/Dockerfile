@@ -20,6 +20,9 @@ RUN bun install --frozen-lockfile --production
 # Build stage
 FROM base AS builder
 
+ARG SENTRY_AUTH_TOKEN
+ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+
 # Copy package files
 COPY package.json bun.lock* ./
 
